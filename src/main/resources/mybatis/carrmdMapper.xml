@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.jobplat.domain.joindb">
+	<cache />
+	<select id="getDocSendFileInfo" resultType="com.neusoft.jobplat.domain.doc.DocSendFile">
+		select documentsendfile_id,documentsendfile_title,to_char(createdtime,'yyyy-MM-dd') createdtime,contentaccname,serialnum 
+			from gov_documentsendfile
+			where serialnum is not null and nvl(dispose_flag,'0') != '1'
+	</select>
+	<select id="getDocReceiveFileInfo" resultType="com.neusoft.jobplat.domain.doc.DocReceiveFile">
+		select receivefile_id,to_char(receivefile_enddate,'yyyy-MM-dd') receivefile_enddate, to_char(receivefile_receivedate,'yyyy-MM-dd') receivefile_receivedate, receivefile_title, accessoryname, serialnum 
+			from gov_receivefile
+			where serialnum is not null and nvl(dispose_flag,'0') != '1'
+	</select>
+	<select id="getDocSendCheckInfo" resultType="com.neusoft.jobplat.domain.doc.DocSendCheckFile">
+		select sendfilecheck_id,to_char(sendfilecheck_submittime,'yyyy-MM-dd') sendfilecheck_submittime,sendfilecheck_title, serialnum
+			from gov_sendfilecheckwithworkflow
+			where serialnum is not null and nvl(dispose_flag,'0') != '1'
+	</select>
+	<select id="getDocCheckAccessory" parameterType="java.lang.String" resultType="com.neusoft.jobplat.domain.doc.DocSendCheckFile">
+		select c.sendfilecheck_id,c.obj_code,ac.displayname,ac.savename from gov_sendfilecheckwithworkflow c
+			left join gov_sendfilecheckwithwf_acc ac on c.sendfilecheck_id = ac.sendfilecheck_id
+			where ac.displayname is not null and ac.savename is not null 
+			and c.obj_code like #{1}
+	</select>
+	<update id="updateSendFileStatus" parameterType="com.neusoft.jobplat.domain.doc.DocSendFile">
+		update gov_documentsendfile set dispose_flag='1', obj_code=#{obj_code} where documentsendfile_id=#{documentsendfile_id}
+	</update>
+	<update id="updateReceiveFileStatus" parameterType="com.neusoft.jobplat.domain.doc.DocReceiveFile">
+		update gov_receivefile set dispose_flag='1', obj_code=#{obj_code} where receivefile_id=#{receivefile_id}
+	</update>
+	<update id="updateSendCheckFileStatus" parameterType="com.neusoft.jobplat.domain.doc.DocSendCheckFile">
+		update gov_sendfilecheckwithworkflow set dispose_flag='1', obj_code=#{obj_code} where sendfilecheck_id=#{sendfilecheck_id}
+	</update>
+</mapper>

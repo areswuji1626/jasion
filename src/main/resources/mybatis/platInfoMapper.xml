@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.jobplat.domain.PlatUser">
+	<cache />
+	
+	<insert id="insertPlatUser" parameterType="com.neusoft.jobplat.domain.PlatUserInfo" >
+	    insert into TYPT_USER (F_USER_ID, F_DEPT_ID, F_USER_CODE, F_USER_NAME, F_LOGIN_NAME, F_SEX, F_OFFICE_PHONE,F_MOBILE,F_EMAIL,F_MSN_QQ,F_GUID,F_DW_NAME,F_DW_FULLNAME)
+	      values (#{F_USER_ID},#{F_DEPT_ID},#{F_USER_CODE},#{F_USER_NAME},#{F_LOGIN_NAME},#{F_SEX},#{F_OFFICE_PHONE},#{F_MOBILE},#{F_EMAIL},#{F_MSN_QQ},#{F_GUID},#{F_DW_NAME},#{F_DW_FULLNAME})
+	</insert>
+	<update id="updatePlatUser" parameterType="com.neusoft.jobplat.domain.PlatUserInfo">
+		update TYPT_USER set F_USER_ID = #{F_USER_ID}, F_DEPT_ID = #{F_DEPT_ID}, F_USER_CODE = #{F_USER_CODE}, F_USER_NAME = #{F_USER_NAME},
+			F_LOGIN_NAME = #{F_LOGIN_NAME}, F_SEX = #{F_SEX}, F_OFFICE_PHONE = #{F_OFFICE_PHONE}, F_MOBILE = #{F_MOBILE}, F_EMAIL = #{F_EMAIL}, F_MSN_QQ = #{F_MSN_QQ},
+			F_DW_NAME = #{F_DW_NAME}, F_DW_FULLNAME = #{F_DW_FULLNAME}
+			where F_GUID = #{F_GUID}
+	</update>
+	<delete id="deletePlatUser" parameterType="com.neusoft.jobplat.domain.PlatUserInfo">
+		delete from TYPT_USER where F_USER_ID = #{F_USER_ID}    
+	</delete>
+	<insert id="insertPlatDept" parameterType="com.neusoft.jobplat.domain.PlatDeptInfo">
+	    insert into TYPT_DEPT (F_DEPT_ID, F_AREA_ID,F_DEPT_CODE,F_DEPT_NAME,F_PARENT_ID,F_LEVEL_CODE,F_DEPT_KIND,F_IS_TRUE,F_DEPT_TYPE,F_DEPT_STATUS)
+	    values (#{F_DEPT_ID},#{F_AREA_ID},#{F_DEPT_CODE},#{F_DEPT_NAME},#{F_PARENT_ID},#{F_LEVEL_CODE},#{F_DEPT_KIND},#{F_IS_TRUE},#{F_DEPT_TYPE},#{F_DEPT_STATUS})
+	</insert>
+	<update id="updatePlatDept" parameterType="com.neusoft.jobplat.domain.PlatDeptInfo">
+	    update TYPT_DEPT set F_AREA_ID=#{F_AREA_ID},F_DEPT_CODE=#{F_DEPT_CODE},
+	    F_DEPT_NAME=#{F_DEPT_NAME},F_PARENT_ID=#{F_PARENT_ID},F_LEVEL_CODE=#{F_LEVEL_CODE},F_DEPT_KIND=#{F_DEPT_KIND},
+	    F_IS_TRUE=#{F_IS_TRUE},F_DEPT_TYPE=#{F_DEPT_TYPE},F_DEPT_STATUS=#{F_DEPT_STATUS}
+	    where F_DEPT_ID=#{F_DEPT_ID}
+	</update>
+	<delete id="deletePlatDept" parameterType="com.neusoft.jobplat.domain.PlatDeptInfo">
+	    delete from TYPT_DEPT where F_DEPT_ID=#{F_DEPT_ID}
+	</delete>
+</mapper>

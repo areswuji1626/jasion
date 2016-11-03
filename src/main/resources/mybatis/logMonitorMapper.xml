@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.search.domain.LogMonitor">
+	<cache />
+	
+	<select id="getErrorListByHostAddress" resultType="com.neusoft.jobplat.domain.ErrorInfo" parameterType="java.lang.String">
+		select errorid, errorname, errorinfo, errordesc,c.code_name hostAddress, affectsystem from logerrorinfo e
+		left join logtargetinfo t on t.logtargetid=e.logtargetid
+		left join up_codelist c on c.code_value=t.hostid and c.codetype='HOSTINFO'
+		where c.code_name=#{hostAddress} and t.statusflg='01' and e.statusflg='01'
+	</select>
+	<select id="getLogTargetListByHostAddress" resultType="com.neusoft.jobplat.domain.LogTargetInfo" parameterType="java.lang.String">
+	  	select logtargetid, hostid,c.code_name hostipaddress, logpath, logfilename, lasttimesize, lasttime, logrollbacktype, logrollbackpoint  
+	  	from logtargetinfo t
+		left join up_codelist c on c.code_value=t.hostid and c.codetype='HOSTINFO'
+		where c.code_name=#{hostAddress}  and t.statusflg='01'
+	</select>
+	<select id="getAlertManagerByErrorId" resultType="com.neusoft.jobplat.domain.AlertManagerInfo" parameterType="java.lang.String">
+	    select m.managerid, m.managername, m.managermobile, m.managerstatus from alertmanager m, msgtomanager mm,logerrorinfo e 
+	    where m.managerid=mm.managerid and mm.errorid=e.errorid and m.managerstatus='01' and e.errorid=#{1} and e.statusflg='01'
+	</select>
+	<select id="getLogTargetByRollbackType" resultType="com.neusoft.jobplat.domain.LogTargetInfo" parameterType="java.lang.String">
+		select logtargetid from logtargetinfo where logrollbacktype = #{1}	    
+	</select>
+	<update id="updateLogTargetLastSize" parameterType="com.neusoft.jobplat.domain.LogTargetInfo">
+		update logtargetinfo set lasttimesize = #{lastTimeSize},lasttime=sysdate where logtargetid = #{logTargetId}
+	</update>
+</mapper>

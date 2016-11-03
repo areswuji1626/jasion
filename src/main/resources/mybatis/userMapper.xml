@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.search.domain.UserService">
+	<cache />
+	
+	<resultMap type="User" id="resultListUser">
+		<id column="uid" property="uid" />
+		<result column="user_id" property="user_id" />
+		<result column="user_name" property="user_name" />
+		<result column="user_show_name" property="user_show_name" />
+		<result column="user_password" property="user_password" />
+	</resultMap>
+	
+	<select id="queryById" resultType="User" parameterType="int">
+		SELECT
+		user_id,
+		user_name,
+		user_show_name,
+		user_password
+		FROM t_user
+		WHERE user_name = #{id}
+	</select>
+
+	<select id="queryAll" resultMap="resultListUser">
+		select user_id,user_name, user_show_name, user_password from t_user
+	</select>
+	
+	<insert id="insertUser" parameterType="user" >
+	    insert into t_user (user_id, user_name, user_show_name, user_password, user_status, user_effect_start, user_effect_end,user_type)
+	      values (#{user_id},#{user_name},#{user_show_name},#{user_password},#{user_status},#{user_effect_start},#{user_effect_end},#{user_type})
+	</insert>
+	
+</mapper>

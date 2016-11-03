@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.jobplat.domain.objdispute">
+	<cache />
+	<select id="getKeepDatasource" resultType="com.neusoft.jobplat.domain.KeepDatasourceInfo">
+	    select r.guid,o.brief_code,o.name obj_name,o.object_table_name,o.ak_column_name,ds.name datasource_name,s.table_name,s.pk_column_name,r.field_codes      
+		from relation r inner join sourcetable s on r.sourcetable_guid = s.guid      
+			inner join datasource ds on s.datasource_guid = ds.guid      
+			inner join objecttable o on r.objecttable_guid = o.guid      
+		where r.flag = '0'
+	</select>
+	<select id="getObjDispute" parameterType="com.neusoft.jobplat.domain.KeepDatasourceInfo" resultType="com.neusoft.jobplat.domain.DisputeData">
+		<![CDATA[
+			select ${pk_column_name} source_code, ${field_codes_statements} remark from ${table_name}@JIERU72 where ID not in (select PERS_CODE from jiwei2.${object_table_name})
+		]]>
+		
+	</select>
+	<select id="getObjDisputeDataByRelationAndSourceCode" parameterType="com.neusoft.jobplat.domain.DisputeData" resultType="com.neusoft.jobplat.domain.DisputeData">
+		<![CDATA[
+			select relation_guid,source_code, type,remark from debatableobject where relation_guid=#{relation_guid} and source_code=#{source_code}
+		]]>
+	</select>
+	<insert id="insertOjbDispute" parameterType="com.neusoft.jobplat.domain.DisputeData" >
+		insert into debatableobject (relation_guid,source_code, type,remark) values (#{relation_guid},#{source_code}, #{type},#{remark})
+	</insert>
+</mapper>

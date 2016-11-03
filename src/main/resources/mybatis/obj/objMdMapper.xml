@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.jobplat.domain.obj.ObjMd">
+	<cache />
+	<select id="getDownloadFileInfo" resultType="com.neusoft.jobplat.domain.obj.ObjMd">
+		<![CDATA[
+	    select a.md_guid,a.file_titl,a.file_nm,a.file_ext,ob.cre_wiun_guid adm_wiun_guid,ow.wiun_name adm_wiun_name,to_char(oc.from_date,'YYYY') year from att_md_base a 
+	      left join rel_md_obj r on r.md_guid=a.md_guid
+	      left join obj_carr oc on oc.carr_guid=r.obj_guid
+	      left join att_carr_ofdo_base ob on ob.carr_guid=oc.carr_guid
+	      left join att_wiun_base aw on aw.wiun_guid=ob.cre_wiun_guid
+	      left join obj_wiun ow on ow.wiun_guid=aw.up_wiun_guid
+	      where file_size is null and r.obj_tab_code like 'OBJ_CARR%' order by to_char(oc.from_date,'YYYY')
+		]]>
+	</select>
+    <insert id="insertObjMd" parameterType="com.neusoft.jobplat.domain.obj.ObjMd" keyProperty="md_guid" useGeneratedKeys="true">
+	    <selectKey keyProperty="md_guid" order="BEFORE" resultType="java.lang.String">
+            select SYS_GUID() as md_guid from DUAL
+        </selectKey>
+	    insert into obj_md 
+	    (md_guid,md_code,md_name,from_date,note,from_table,etl_date)
+	      values 
+	    (#{md_guid},#{md_code},#{md_name},#{from_date},#{note,jdbcType=VARCHAR},#{from_table},sysdate)
+	</insert>
+	<insert id="insertAttMd" parameterType="com.neusoft.jobplat.domain.obj.ObjMd" keyProperty="guid" useGeneratedKeys="true">
+	    <selectKey keyProperty="guid" order="BEFORE" resultType="java.lang.String">
+            select SYS_GUID() as guid from DUAL
+        </selectKey>
+	    insert into att_md_base 
+	    (guid,md_guid,file_titl,key_word,adm_wiun_guid,md_type,file_nm,file_ext,if_secr,secr_grad,lang,etl_date)
+	      values 
+	    (#{guid},#{md_guid},#{file_titl},#{key_word,jdbcType=VARCHAR},#{adm_wiun_guid},#{md_type},#{file_nm},#{file_ext},#{if_secr},#{secr_grad},#{lang},sysdate)
+	</insert>
+	<insert id="insertRelMdObj" parameterType="com.neusoft.jobplat.domain.obj.ObjMd" keyProperty="md_guid" useGeneratedKeys="true">
+	    <selectKey keyProperty="guid" order="BEFORE" resultType="java.lang.String">
+            select SYS_GUID() as guid from DUAL
+        </selectKey>
+	    insert into rel_md_obj 
+	    (guid,md_guid,obj_tab_code,obj_guid,note,etl_date)
+	      values 
+	    (#{guid},#{md_guid},#{obj_tab_code},#{obj_guid},#{note,jdbcType=VARCHAR},sysdate)
+	</insert>
+	<update id="updateMdFileSizePath" parameterType="com.neusoft.jobplat.domain.obj.ObjMd">
+		update att_md_base set file_size = #{file_size,jdbcType=BIGINT}, file_path=#{file_path,jdbcType=VARCHAR} where md_guid=#{md_guid,jdbcType=VARCHAR}
+	</update>
+</mapper>

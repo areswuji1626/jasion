@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>  
+    <typeAliases>  
+        <typeAlias alias="user" type="com.neusoft.jobplat.domain.User"/>  
+    </typeAliases>  
+      
+    <!-- 指定映射文件 -->  
+    <mappers>  
+        <mapper resource="mybatis/userMapper.xml" />
+        <mapper resource="mybatis/platInfoMapper.xml" />
+        <mapper resource="mybatis/thumbnailMapper.xml" />
+        <mapper resource="mybatis/logMonitorMapper.xml" />
+        <mapper resource="mybatis/objDisputeMapper.xml" />
+        <mapper resource="mybatis/carrmdMapper.xml" />
+        <mapper resource="mybatis/obj/objCarrMapper.xml" />
+        <mapper resource="mybatis/obj/objMdMapper.xml" />
+    </mappers>  
+</configuration>

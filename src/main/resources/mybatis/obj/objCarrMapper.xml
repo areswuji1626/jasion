@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.jobplat.domain.obj.ObjCarr">
+	<cache />
+    <insert id="insertObjCarr" parameterType="com.neusoft.jobplat.domain.obj.ObjCarr" keyProperty="carr_guid" useGeneratedKeys="true">
+	    <selectKey keyProperty="carr_guid" order="BEFORE" resultType="java.lang.String">
+            select SYS_GUID() as carr_guid from DUAL
+        </selectKey>
+	    insert into obj_carr 
+	    (carr_guid,carr_code,carr_name,carr_type,from_date,note,from_table,etl_date)
+	      values 
+	    (#{carr_guid},#{carr_code},#{carr_name},#{carr_type},to_date(#{from_date},'yyyy-MM-dd'),#{note},#{from_table},sysdate)
+	</insert>
+	<select id="getObjCarrByCode" parameterType="com.neusoft.jobplat.domain.obj.ObjCarr" resultType="com.neusoft.jobplat.domain.obj.ObjCarr">
+		select carr_code from obj_carr where carr_code = #{carr_code}
+	</select>
+	<select id="getSendAccessoryInfo" resultType="com.neusoft.jobplat.domain.obj.AttCarr">
+		select o.carr_guid,o.carr_code,s.acc_name,s.acc_save_name,o.from_date,rm.md_guid,b.secr_grad,b.cre_wiun_guid 
+			from att_carr_ofdo_base b
+			left join att_carr_ofdo_send s on b.guid=s.ofdo_guid
+			left join obj_carr o on b.carr_guid=o.carr_guid
+			left join rel_md_obj rm on rm.obj_guid=o.carr_guid and rm.obj_tab_code like 'OBJ_CARR%' 
+		where b.cre_wiun_guid is not null and rm.md_guid is null and s.acc_name is not null and s.acc_save_name is not null
+	</select>
+	<select id="getReceiveAccessoryInfo" resultType="com.neusoft.jobplat.domain.obj.AttCarr">
+	    select o.carr_guid,o.carr_code,r.acc_name,r.acc_save_name,o.from_date,rm.md_guid,b.secr_grad,b.cre_wiun_guid 
+	      from att_carr_ofdo_base b
+	      left join att_carr_ofdo_rec r on b.guid=r.ofdo_guid
+	      left join obj_carr o on b.carr_guid=o.carr_guid
+	      left join rel_md_obj rm on rm.obj_guid=o.carr_guid and rm.obj_tab_code like 'OBJ_CARR%' 
+	    where b.cre_wiun_guid is not null and rm.md_guid is null and r.acc_name is not null and r.acc_save_name is not null
+	</select>
+	<select id="getCheckAccessoryInfo" resultType="com.neusoft.jobplat.domain.obj.AttCarr">
+	    select o.carr_guid,o.carr_code,o.from_date,rm.md_guid,b.secr_grad,b.cre_wiun_guid 
+	      from att_carr_ofdo_base b
+	      left join obj_carr o on b.carr_guid=o.carr_guid
+	      left join rel_md_obj rm on rm.obj_guid=o.carr_guid and rm.obj_tab_code like 'OBJ_CARR%' 
+	    where b.cre_wiun_guid is not null and rm.md_guid is null	
+	</select>
+</mapper>

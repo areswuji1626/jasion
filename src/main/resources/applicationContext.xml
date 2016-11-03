@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/tx
+     	   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://cxf.apache.org/jaxws
+    	   http://cxf.apache.org/schemas/jaxws.xsd
+    	   http://cxf.apache.org/jaxrs
+    	   http://cxf.apache.org/schemas/jaxrs.xsd
+    	   ">
+           	
+	<!-- 采用注释的方式配置bean -->  
+    <context:annotation-config />  
+    <!-- 配置要扫描的包 -->  
+    <context:component-scan base-package="com.neusoft.jobplat" />
+	<!-- 加载 jdbc.properties 配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" file-encoding="UTF-8"/>
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+	<!-- 配置数据源 1 配置 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+    	<property name="driverClass" value="${jdbc.driver}" />  
+    	<property name="jdbcUrl" value="${jdbc.url}" />  
+    	<property name="user" value="${jdbc.username}" />  
+    	<property name="password" value="${jdbc.password}" />  
+    	<property name="autoCommitOnClose" value="true" />  
+    	<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}" />  
+    	<property name="initialPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="minPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />  
+    	<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />  
+    	<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />  
+    	<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。  
+		        但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0-->  
+		<property name="maxStatements" value="${jdbc.maxStatements}"/>  
+		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/> 
+		<property name="preferredTestQuery" value="${jdbc.preferredTestQuery}" /> 
+	</bean>
+
+	<!-- 配置数据源 2 配置 -->
+	<bean id="dataSource2" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+    	<property name="driverClass" value="${jdbc.driver2}" />  
+    	<property name="jdbcUrl" value="${jdbc.url2}" />  
+    	<property name="user" value="${jdbc.username2}" />  
+    	<property name="password" value="${jdbc.password2}" />  
+    	<property name="autoCommitOnClose" value="true" />  
+    	<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}" />  
+    	<property name="initialPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="minPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />  
+    	<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />  
+    	<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />  
+    	<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。  
+		        但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0-->  
+		<property name="maxStatements" value="${jdbc.maxStatements}"/>  
+		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/> 
+		<property name="preferredTestQuery" value="${jdbc.preferredTestQuery}" />  
+	</bean>
+	
+		<!-- 配置数据源 3 配置 -->
+	<bean id="dataSource3" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+    	<property name="driverClass" value="${jdbc.driver3}" />  
+    	<property name="jdbcUrl" value="${jdbc.url3}" />  
+    	<property name="user" value="${jdbc.username3}" />  
+    	<property name="password" value="${jdbc.password3}" />  
+    	<property name="autoCommitOnClose" value="true" />  
+    	<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}" />  
+    	<property name="initialPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="minPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />  
+    	<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />  
+    	<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />  
+    	<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。  
+		        但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0-->  
+		<property name="maxStatements" value="${jdbc.maxStatements}"/>  
+		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/> 
+		<property name="preferredTestQuery" value="${jdbc.preferredTestQuery}" />  
+	</bean>
+		<!-- 配置数据源 4 配置 -->
+		<bean id="dataSource4" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+    	<property name="driverClass" value="${jdbc.driver4}" />  
+    	<property name="jdbcUrl" value="${jdbc.url4}" />  
+    	<property name="user" value="${jdbc.username4}" />  
+    	<property name="password" value="${jdbc.password4}" />  
+    	<property name="autoCommitOnClose" value="true" />  
+    	<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}" />  
+    	<property name="initialPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="minPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />  
+    	<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />  
+    	<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />  
+    	<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。  
+		        但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0-->  
+		<property name="maxStatements" value="${jdbc.maxStatements}"/>  
+		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/> 
+		<property name="preferredTestQuery" value="${jdbc.preferredTestQuery}" />  
+	</bean>	
+		<!-- 配置数据源 45配置 -->
+		<bean id="dataSource5" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+    	<property name="driverClass" value="${jdbc.driver5}" />  
+    	<property name="jdbcUrl" value="${jdbc.url5}" />  
+    	<property name="user" value="${jdbc.username5}" />  
+    	<property name="password" value="${jdbc.password5}" />  
+    	<property name="autoCommitOnClose" value="true" />  
+    	<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}" />  
+    	<property name="initialPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="minPoolSize" value="${jdbc.minPoolSize}" />  
+    	<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />  
+    	<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />  
+    	<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />  
+    	<!-- JDBC的标准,用以控制数据源内加载的PreparedStatements数量。  
+		        但由于预缓存的statements属于单个connection而不是整个连接池所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,则缓存被关闭。Default:0-->  
+		<property name="maxStatements" value="${jdbc.maxStatements}"/>  
+		<!-- 每60秒检查所有连接池中的空闲连接.Default:0 -->  
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/> 
+		<property name="preferredTestQuery" value="${jdbc.preferredTestQuery}" />  
+	</bean>		
+	<bean id="dynamicDataSource" class="com.neusoft.framework.db.DynamicDataSource">
+		<!-- 通过key-value的形式来关联数据源 -->
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="dataSource" key="dataSource"></entry>
+				<entry value-ref="dataSource2" key="dataSource2"></entry>
+				<entry value-ref="dataSource3" key="dataSource3"></entry>
+				<entry value-ref="dataSource4" key="dataSource4"></entry>
+				<entry value-ref="dataSource5" key="dataSource5"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSource" />
+	</bean>
+	<!-- Session工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" />
+		<!-- mybatis配置文件 -->
+		<property name="configLocation" value="classpath:mybatis.xml" />
+	</bean>
+	
+	<!-- 配置SqlSessionTemplate -->  
+	<!-- scope="prototype" 用于消除警告：UnsupportedOperationException: Manual close is not allowed over a Spring managed SqlSession -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">  
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean>  
+
+    <bean id="requestMappingHandlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    <bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+            </list>
+        </property>
+    </bean>
+    
+    <!-- definition of View Resolver -->  
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+    <property name="viewClass">  
+        <value>org.springframework.web.servlet.view.JstlView</value>  
+    </property>  
+    </bean>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <property name="defaultEncoding" value="UTF-8"></property>  
+    </bean>
+    <bean id="app" class="com.neusoft.framework.utils.ApplicationUtil"></bean>
+
+    <!-- Job -->
+    <bean class="com.neusoft.framework.job.InitJobListener"></bean>
+
+    <aop:config>  
+        <aop:aspect id="dataSourceAspect" ref="dataSourceInterceptor">  
+            <aop:pointcut id="daoPlatInfo" expression="execution(public * com.neusoft.jobplat.dao.platinfo.*.*(..))" />  
+            <aop:pointcut id="daoPreObj" expression="execution(public * com.neusoft.jobplat.dao.preobj.*.*(..))" />  
+            <aop:pointcut id="daoPlatSupport" expression="execution(public * com.neusoft.jobplat.dao.platsupport.*.*(..))" />
+            <aop:pointcut id="daoObjDispute" expression="execution(public * com.neusoft.jobplat.dao.objdispute.*.*(..))" />
+            <aop:pointcut id="daojoinDatabase" expression="execution(public * com.neusoft.jobplat.dao.joindb.*.*(..))" />
+            <aop:before pointcut-ref="daoPlatInfo" method="setDatasourcePlat" />  
+            <aop:before pointcut-ref="daoPreObj" method="setDatasourcePreObj" />  
+            <aop:before pointcut-ref="daoPlatSupport" method="setDatasourcePlatSupport" />  
+            <aop:before pointcut-ref="daoObjDispute" method="setDatasourceObjDispute" />  
+            <aop:before pointcut-ref="daojoinDatabase" method="setDatasourceJoinDatabase" /> 
+        </aop:aspect>  
+    </aop:config>
+    <bean id="dataSourceInterceptor" class="com.neusoft.framework.db.DataSourceInterceptor"></bean>
+</beans>  

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.neusoft.jobplat.domain.Thumbnail">
+	<cache />
+	<select id="getThumbnailObjsBySize" parameterType="java.util.HashMap" resultType="com.neusoft.jobplat.domain.MDInfo">
+	    select md_guid, file_titl, file_nm, file_ext, file_path from att_md_base
+	    where 1=1
+	    <if test="size>0">
+	    and rownum&lt;=#{size}
+	    </if>
+	    and file_ext in
+	    <foreach item="item" index="index" collection="types" open="(" separator="," close=")">
+	       #{item} 
+	    </foreach>
+	    and thum_path is null
+	</select>
+	<!-- and md_guid='5DEEE58AED594950866A0CFF33D5A44F' -->
+	<update id="updateMdThumbPathByGUID" parameterType="java.util.HashMap" >
+    	update att_md_base set thum_path = #{thumb_path} where md_guid=#{md_guid}
+    </update>
+</mapper>
